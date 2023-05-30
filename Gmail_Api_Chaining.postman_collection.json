@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "9a4c1e48-cf30-4216-990e-134cd2356f51",
+		"name": "Gmail_Api_Chaining",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27297636"
+	},
+	"item": [
+		{
+			"name": "Message Send Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"the status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"the content type is application/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=UTF-8');\r",
+							"});\r",
+							"//check the valid fields with correct data\r",
+							"var response=JSON.parse(responseBody);\r",
+							"pm.test(\"validate all fields with values\", () => {\r",
+							"    pm.environment.set(\"mesId\",response.id);\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "message/rfc822",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer ya29.a0AWY7CkmODzF2FO4dHClB9smpvzPYSYS-G_-vD6rfHi-vV1SYJ5b68qlYpmXmsZVA31BF8DNNN5yjXA3IToxX4klZect2EmKt_not98quQ8vdql2dWwsuIf7jfICvssdf3M7ssc0im6_6tXRXZwrrsQsJi4EgaCgYKARQSARISFQG1tDrppf_BCaxmeYlAt8XeMi4jNg0163",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"raw\": \"RnJvbTogdGVzdGVyYmF0Y2gyNjJAZ21haWwuY29tClRvOiBnb3ZpbmRyb3V0aHUxNDNAZ21haWwuY29tClN1YmplY3Q6IFNheWluZyBIZWxsbwoKClRoaXMgaXMgYSBtZXNzYWdlIGp1c3QgdG8gc2F5IGhlbGxvLgpTbywgIkhlbGxvIi4=\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gmail.googleapis.com/gmail/v1/users/{{userId}}/messages/send",
+					"protocol": "https",
+					"host": [
+						"gmail",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"gmail",
+						"v1",
+						"users",
+						"{{userId}}",
+						"messages",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"the status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"the content type is application/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=UTF-8');\r",
+							"});\r",
+							"// check the response values of fieldsis correct or not\r",
+							"pm.test(\"Response property matches environment variable\", function () {\r",
+							"  pm.expect(pm.response.json().id).to.eql(pm.environment.get(\"mesId\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gmail.googleapis.com/gmail/v1/users/{{userId}}/messages/{{mesId}}",
+					"protocol": "https",
+					"host": [
+						"gmail",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"gmail",
+						"v1",
+						"users",
+						"{{userId}}",
+						"messages",
+						"{{mesId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"the status code is 200\", () => {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"pm.environment.unset(\"mesId\");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://gmail.googleapis.com/gmail/v1/users/{{userId}}/messages/{{mesId}}",
+					"protocol": "https",
+					"host": [
+						"gmail",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"gmail",
+						"v1",
+						"users",
+						"{{userId}}",
+						"messages",
+						"{{mesId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
